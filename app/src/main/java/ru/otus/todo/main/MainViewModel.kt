@@ -13,14 +13,19 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val taskRepository: TaskRepository) : ViewModel() {
     private val tasksLive = MutableLiveData<List<Task>>()
+    private val tasksCountLive = MutableLiveData<Int>()
     private var activeJob: Job? = null
 
     fun loadData () {
+        if (activeJob?.isActive == true) {
+            activeJob?.cancel()
+        }
         activeJob = viewModelScope.launch {
             try {
                 taskRepository.request() { response ->
                     tasksLive.value = response
                 }
+                tasksCountLive.value= taskRepository.getTaskCount()
             }
             catch (e: Exception) {
                 Log.e("Ошибка", e.localizedMessage)
@@ -28,13 +33,11 @@ class MainViewModel @Inject constructor(private val taskRepository: TaskReposito
         }
     }
 
-    fun cancel() {
-        activeJob?.cancel()
-        activeJob = null
-    }
-
-    fun getTasksLive(): LiveData<List<Task>> {
+     fun getTasksLive(): LiveData<List<Task>> {
         return tasksLive
     }
 
+    fun getTasksCountLive(): LiveData<Int> {
+        return tasksCountLive
+    }
 }

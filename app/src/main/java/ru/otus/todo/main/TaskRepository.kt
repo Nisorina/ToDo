@@ -28,15 +28,25 @@ class TaskRepository @Inject constructor() {
             callback(response.body())
         }
         else {
-            Log.e("Ошибочка", "${response.code()} ${response.message()}")
+            Log.e("Ошибка", "${response.code()} ${response.message()}")
         }
+    }
+
+    suspend fun getTaskCount() :Int {
+        var result = 0
+        request { response ->
+           if (response!=null) {
+               result = response.size
+           }
+        }
+        return result
     }
 
     interface ToDoService {
         @GET("rest/v2/tasks ")
         @Headers("Content-Type:application/json",
             "Accept:application/json",
-            "Authorization: Bearer 1612d4f2eeaa9d46a7fa7f3273618d17d80f5a9f")
+            "Authorization: Bearer 56f59f44af3f0c5b752520e4723a84a6b170d99f")
         suspend fun getTasks(): Response<List<Task>>
     }
 }

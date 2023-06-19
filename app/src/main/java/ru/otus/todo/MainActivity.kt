@@ -27,12 +27,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.getTasksLive().observe(this) { tasks ->
             binding.mainText.text = tasks.stream().map(Task::content).collect(Collectors.joining(", "))
 
-            }
-    }
+        }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.cancel()
+        viewModel.getTasksCountLive().observe(this) {count ->
+            binding.taskCount.text = "Количество задач: $count"
+        }
     }
 
 }
