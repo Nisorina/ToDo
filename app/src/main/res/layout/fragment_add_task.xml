@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".addTask.AddTaskFragment">
+
+    <EditText
+        android:id="@+id/task_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Введите задачу"
+        android:textSize="46dp"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/add_task_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:textSize="32dp"
+        android:text="Добавить"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:text="Домой"
+        android:textSize="32dp"
+        app:iconSize="32dp"
+        android:layout_gravity="center|top"
+        app:icon="@drawable/home"
+        />
+</FrameLayout>

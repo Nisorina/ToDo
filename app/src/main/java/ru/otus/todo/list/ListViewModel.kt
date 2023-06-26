@@ -1,4 +1,4 @@
-package ru.otus.todo.main
+package ru.otus.todo.list
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,14 +8,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import ru.otus.todo.main.Task
+import ru.otus.todo.main.TaskRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val taskRepository: TaskRepository) : ViewModel() {
+class ListViewModel @Inject constructor(private val taskRepository: TaskRepository): ViewModel() {
     private val tasksLive = MutableLiveData<List<Task>>()
-    private val tasksCountLive = MutableLiveData<Int>()
     private var activeJob: Job? = null
-
     fun loadData () {
         if (activeJob?.isActive == true) {
             activeJob?.cancel()
@@ -25,7 +25,6 @@ class MainViewModel @Inject constructor(private val taskRepository: TaskReposito
                 taskRepository.request() { response ->
                     tasksLive.value = response
                 }
-                tasksCountLive.value= taskRepository.getTaskCount()
             }
             catch (e: Exception) {
                 Log.e("Ошибка", e.localizedMessage)
@@ -33,11 +32,7 @@ class MainViewModel @Inject constructor(private val taskRepository: TaskReposito
         }
     }
 
-     fun getTasksLive(): LiveData<List<Task>> {
+    fun getTasksLive(): LiveData<List<Task>> {
         return tasksLive
-    }
-
-    fun getTasksCountLive(): LiveData<Int> {
-        return tasksCountLive
     }
 }
