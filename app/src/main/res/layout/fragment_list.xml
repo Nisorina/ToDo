@@ -6,22 +6,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".list.ListFragment">
 
-    <TextView
-        android:id="@+id/list_items"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/list_name"
-        android:layout_gravity="center"
-        android:textSize="32dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Домой"
+            android:textSize="20dp"
+            app:iconSize="20dp"
+            app:icon="@drawable/home"
+            android:backgroundTint="#03A9F4"
+            />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/home"
-        android:layout_width="wrap_content"
-        android:layout_height="90dp"
-        android:text="Домой"
-        android:textSize="32dp"
-        app:iconSize="32dp"
-        android:layout_gravity="center|top"
-        app:icon="@drawable/home"
-        />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/home"/>
+
+    </RelativeLayout>
 </FrameLayout>

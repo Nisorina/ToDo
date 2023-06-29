@@ -32,6 +32,19 @@ class ListViewModel @Inject constructor(private val taskRepository: TaskReposito
         }
     }
 
+    fun closeTask (id:String) {
+      viewModelScope.launch {
+            try {
+                taskRepository.closeTask(id) { response ->
+                   println("выполнился ${ response.code()}")
+                }
+            }
+            catch (e: Exception) {
+                Log.e("Ошибка", e.localizedMessage)
+            }
+        }
+    }
+
     fun getTasksLive(): LiveData<List<Task>> {
         return tasksLive
     }

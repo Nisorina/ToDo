@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ru.otus.todo.R
 import ru.otus.todo.count.CountFragment
 import ru.otus.todo.databinding.FragmentListBinding
@@ -20,7 +23,7 @@ class ListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
     private val viewModel: ListViewModel by activityViewModels()
-
+    private val taskAdapter: TaskAdapter by lazy { TaskAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,10 +34,29 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView = binding.recyclerView
+        val layoutManager = LinearLayoutManager(context)
+
+        val itemTouchHelper = ItemTouchHelper(object : SwipeCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.bindingAdapterPosition
+                val removedTask = taskAdapter.getTask(position)
+                removedTask.id?.let { viewModel.closeTask(it) }
+                taskAdapter.removeItem(position)
+                taskAdapter.notifyItemRemoved(position)
+            }
+        })
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+        recyclerView.apply {
+            this.layoutManager = layoutManager
+            adapter = taskAdapter
+        }
         viewModel.loadData()
 
         viewModel.getTasksLive().observe(viewLifecycleOwner) { tasks ->
-            binding.listItems.text = tasks.stream().map(Task::content).collect(Collectors.joining(", "))
+            taskAdapter.submitData(tasks as MutableList<Task>)
+            taskAdapter.notifyDataSetChanged()
         }
 
         binding.home.setOnClickListener() {

@@ -12,7 +12,6 @@ import ru.otus.todo.count.CountFragment
 import ru.otus.todo.databinding.FragmentAddTaskBinding
 import java.util.stream.Collectors
 
-
 class AddTaskFragment : Fragment() {
     companion object {
         fun newInstance() = AddTaskFragment()
@@ -20,7 +19,7 @@ class AddTaskFragment : Fragment() {
     private lateinit var binding: FragmentAddTaskBinding
     private val viewModel: AddTaskViewModel by activityViewModels()
 
-    override fun onCreateView(
+     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -33,7 +32,7 @@ class AddTaskFragment : Fragment() {
 
         viewModel.getAddedTasksLive().observe(viewLifecycleOwner) {
                 addedTask ->
-            Toast.makeText(activity, "добавлена задача ${addedTask.content}", Toast.LENGTH_SHORT).show()
+            binding.lastAddedTask.text = "добавлена задача ${addedTask.content}"
         }
 
         binding.addTaskButton.setOnClickListener() {
@@ -50,8 +49,5 @@ class AddTaskFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }
-
-
-
     }
 }
